@@ -2,6 +2,11 @@
 <!-- Boot-logo layers: WaylandManager stand-in that plays /jci/resources/*.ivf. -->
 <script src="/emulator/ui-wayland.js"></script>
 
+<!-- Local Gauges integration: ndgauges.js links to the sibling nd-gauges -->
+<!-- checkout, not a second implementation. See README for local firmware -->
+<!-- assets/menu setup. No GAUGES_DEV: use only the OEM Applications entry. -->
+<script src="/emulator/ndgauges.js"></script>
+
 <script>
     window.opera = window.opera || {
         version: function () {

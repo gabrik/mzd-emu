@@ -1,5 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const uiServer = require('./ui-server');
 
@@ -21,6 +23,15 @@ test('only the jci and emulator mounts are reachable', () => {
     ]) {
         assert.equal(uiServer.resolveRequestPath(url), null, url);
     }
+});
+
+test('Gauges links to its shared source and does not enable the dev launcher', () => {
+    const overlay = path.join(__dirname, '..', 'client', 'ndgauges.js');
+    assert.equal(fs.readlinkSync(overlay), '../../nd-gauges/app/gauges.js');
+    assert.equal(uiServer.resolveRequestPath('/emulator/ndgauges.js'), overlay);
+    const html = uiServer.injectPolyfills('<html><head></head><body></body></html>');
+    assert.ok(html.includes('<script src="/emulator/ndgauges.js"></script>'));
+    assert.doesNotMatch(html, /(?:window\.)?GAUGES_DEV\s*=/);
 });
 
 test('resolveRequestPath rejects malformed encoded paths', () => {

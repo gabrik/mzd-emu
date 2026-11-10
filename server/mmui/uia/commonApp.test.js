@@ -5,6 +5,7 @@ const commonApp = require('./commonApp');
 const navigationState = require('../state/navigationState');
 const syssettingsApp = require('./syssettingsApp');
 const systemApp = require('./systemApp');
+const { VEHICLE_EQUIPMENT } = require('../services/vehicleEquipment');
 const { createMockWs } = require('../../testing/mockWs');
 const { resetDialogs } = require('../../testing/dialogs');
 
@@ -74,14 +75,22 @@ test('Global.GoBack never empties the stack', () => {
     assert.equal(ws.messages.length, 0);
 });
 
-test('SelectSettings opens the settings of the sender: ecoenergy has its own', () => {
-    const fromSystem = createMockWs();
-    events.SelectSettings(fromSystem, {}, 'system');
-    assert.equal(fromSystem.messages.find((m) => m.msgType === 'ctxtChg').uiaId, 'vehsettings');
+test('SelectSettings opens Display without HUD; ecoenergy has its own settings', () => {
+    const savedHud = VEHICLE_EQUIPMENT.Hud_Installed;
+    try {
+        VEHICLE_EQUIPMENT.Hud_Installed = 0;
+        const fromSystem = createMockWs();
+        events.SelectSettings(fromSystem, {}, 'system');
+        const systemContext = fromSystem.messages.find((m) => m.msgType === 'ctxtChg');
+        assert.equal(systemContext.uiaId, 'syssettings');
+        assert.equal(systemContext.ctxtId, 'DisplayTab');
 
-    const fromEco = createMockWs();
-    events.SelectSettings(fromEco, {}, 'ecoenergy');
-    const ctxtChg = fromEco.messages.find((m) => m.msgType === 'ctxtChg');
-    assert.equal(ctxtChg.uiaId, 'ecoenergy');
-    assert.equal(ctxtChg.ctxtId, 'Settings');
+        const fromEco = createMockWs();
+        events.SelectSettings(fromEco, {}, 'ecoenergy');
+        const ctxtChg = fromEco.messages.find((m) => m.msgType === 'ctxtChg');
+        assert.equal(ctxtChg.uiaId, 'ecoenergy');
+        assert.equal(ctxtChg.ctxtId, 'Settings');
+    } finally {
+        VEHICLE_EQUIPMENT.Hud_Installed = savedHud;
+    }
 });

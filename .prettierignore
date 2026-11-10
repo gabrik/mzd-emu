@@ -1,6 +1,8 @@
 # Firmware and external data are reference material.
 /jci/
 /node_modules/
+# Do not format the shared Gauges source through its symlink.
+/client/ndgauges.js
 
 # User-editable runtime state.
 /server/data/user-settings.json

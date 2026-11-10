@@ -4,7 +4,13 @@ const prettier = require('eslint-config-prettier');
 
 module.exports = [
     {
-        ignores: ['jci/**', 'node_modules/**', 'server/data/user-settings.json']
+        // The Gauges symlink is maintained and checked in its own repository.
+        ignores: [
+            'jci/**',
+            'node_modules/**',
+            'server/data/user-settings.json',
+            'client/ndgauges.js'
+        ]
     },
     js.configs.recommended,
     {

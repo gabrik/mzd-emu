@@ -68,6 +68,38 @@ npm run mmui   # WebSocket MMUI/UIA transport
 npm run ui     # firmware GUI HTTP server
 ```
 
+## Local Gauges integration
+
+This checkout uses the MX-5 vehicle profile (`J12A`, no factory HUD).
+The browser loads `/emulator/ndgauges.js` through the emulator injection point.
+That file is a **relative symlink**, not a copy of the overlay. Clone
+[nd-gauges](https://github.com/gabrik/nd-gauges) beside this repository:
+
+```text
+workspace/
+├── nd-gauges/app/gauges.js
+└── mzd-emu/client/ndgauges.js -> ../../nd-gauges/app/gauges.js
+```
+
+Use a Git checkout that preserves symlinks. Without the sibling checkout,
+the optional overlay URL returns 404; the stock emulator can still run.
+Changes to the overlay belong in `nd-gauges`, not in this repository.
+Its layout tests are run there with `node dev/test-layout.js`.
+
+The extracted firmware still needs local integration: the Gauges Applications
+entry (`ndgauges` / `SelectNdGauges`, English label `NdGauges: Gauges`),
+`jci/gui/gauges/gauges.css` from `nd-gauges/app/gauges.css`, and
+`jci/gui/gauges/cardata.json` with development readings. These files and menu
+edits live under ignored `jci/`; this commit does **not** provision or distribute
+them. The production installer in `nd-gauges/cmu/install-gauges.sh` defines the
+menu patch; do not execute that car-targeted installer on the host computer.
+The injection alone does not add the Applications entry. Do not enable
+`GAUGES_DEV` or add a floating launcher to this integration.
+
+Browser readings are simulated development data, not actual vehicle telemetry.
+This browser setup does not validate the original ARM Opera/kernel UI or the
+on-car installer.
+
 ## Controls
 
 The real head unit is operated with a rotary controller you tilt in 4

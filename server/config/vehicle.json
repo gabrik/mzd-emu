@@ -1,7 +1,7 @@
 {
     "region": "Region_Europe",
     "destinationCode": "SETTINGS_Destination_EU",
-    "vehicleType": "SETTINGS_VehicleModelType_J78A",
+    "vehicleType": "SETTINGS_VehicleModelType_J12A",
     "hudType": "WHUD_color",
     "navigationSdCard": "On",
     "bose": "On",

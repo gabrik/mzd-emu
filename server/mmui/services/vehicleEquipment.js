@@ -45,7 +45,7 @@ const VEHICLE_EQUIPMENT = {
     LightTimeoutDoorClosed_Installed: 1, // Interior light timeout (door closed)
 
     // --- Displays ---
-    Hud_Installed: 1, // Head-Up Display
+    Hud_Installed: 0, // Head-Up Display (the MX-5 ND never offered a factory HUD)
 
     // --- Other ---
     TVM_Installed: 1, // Traffic View Monitor / 360 View Monitor
